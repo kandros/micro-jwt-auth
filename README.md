@@ -1,6 +1,8 @@
 # micro-jwt-auth
 jwt authencication wrapper for zeit/micro
 
+> An `Authorization` header with value `Bearer MY_TOKEN_HERE` is expected
+
 ## example
 ```javascript
 'use strict'
