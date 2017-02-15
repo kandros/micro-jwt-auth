@@ -1,5 +1,5 @@
 {
-  "name": "micro-jwt",
+  "name": "micro-jwt-auth",
   "version": "1.0.0",
   "description": "jwt authencication wrapper for zeit/micro",
   "author": "jaga santagostino <jagasantagostino@gmail.com>",
