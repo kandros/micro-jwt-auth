@@ -18,7 +18,7 @@ module.exports = exports = (secret) => (fn) => {
         }
         
         try {
-            const token = bearerToken.split(' ')[1]
+            const token = bearerToken.replace('Bearer ', '')
             jwt.verify(token, secret);
         } catch(err) {
             res.writeHead(401)

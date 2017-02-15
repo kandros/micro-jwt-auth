@@ -5,5 +5,7 @@
   "author": "jaga santagostino <jagasantagostino@gmail.com>",
   "dependencies": {
     "jsonwebtoken": "7.3.0"
-  }
+  },
+  "main": "index.js",
+  "license": "ISC"
 }
