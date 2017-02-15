@@ -1,14 +1,9 @@
 {
   "name": "micro-jwt",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
+  "version": "1.0.0",
+  "description": "jwt authencication wrapper for zeit/micro",
+  "author": "jaga santagostino <jagasantagostino@gmail.com>",
   "dependencies": {
-    "jsonwebtoken": "^7.3.0"
+    "jsonwebtoken": "7.3.0"
   }
 }
