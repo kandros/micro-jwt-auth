@@ -7,5 +7,9 @@
     "jsonwebtoken": "7.3.0"
   },
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kandros/micro-jwt-auth.git"
+  }
 }
