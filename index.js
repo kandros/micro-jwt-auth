@@ -3,12 +3,12 @@
 const jwt = require('jsonwebtoken')
 
 module.exports = exports = (secret) => (fn) => {
+       
+    if (!secret) {
+        throw Error('secret is undefined')
+    }
+    
     return (req, res) => {
-        
-        if (!secret) {
-            throw Error('secret is undefined')
-        }
-        
         const bearerToken = req.headers.authorization
         
         if (!bearerToken) {
