@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 module.exports = exports = (secret) => (fn) => {
        
     if (!secret) {
-        throw Error('secret is undefined')
+        throw Error('micro-jwt-auth must me initialized passing a secret to decode incoming JWT token')
     }
     
     return (req, res) => {
