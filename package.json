@@ -6,6 +6,12 @@
   "dependencies": {
     "jsonwebtoken": "7.3.0"
   },
+  "devDependencies": {
+    "jest": "^18.1.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
   "main": "index.js",
   "license": "MIT",
   "repository": {
