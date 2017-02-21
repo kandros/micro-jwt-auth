@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kandros/micro-jwt-auth.svg?branch=master)](https://travis-ci.org/kandros/micro-jwt-auth)
+
 # micro-jwt-auth
 jwt authorization wrapper for [Micro](https://github.com/zeit/micro)
 
