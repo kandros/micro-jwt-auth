@@ -5,7 +5,9 @@
 
 > An `Authorization` header with value `Bearer MY_TOKEN_HERE` is expected
 
-## example
+## examples
+
+#### with no other wrappers
 ```javascript
 'use strict'
 
@@ -18,4 +20,23 @@ const jwtAuth = require('micro-jwt-auth')
 module.exports = jwtAuth('my_jwt_secret')(async(req, res) => {
   return "Ciaone!"
 })
+```
+
+#### with multiple wrappers 
+
+```javascript
+'use strict'
+
+const jwtAuth = require('micro-jwt-auth')
+
+const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)))
+
+const handle = async(req, res) => {
+  return "Ciaone!"
+}
+
+module.exports = compose(
+    jwtAuth(process.env.jwt_secret),
+    anotherWrapper
+)(handle)
 ```
