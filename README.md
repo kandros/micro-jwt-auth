@@ -37,6 +37,9 @@ const handle = async(req, res) => {
 
 module.exports = compose(
     jwtAuth(process.env.jwt_secret),
-    anotherWrapper
+    anotherWrapper,
+    analitycsWrapper,
+    redirectWrapper,
+    yetAnotherWrapper
 )(handle)
 ```
