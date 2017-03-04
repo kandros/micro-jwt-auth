@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/kandros/micro-jwt-auth.svg?branch=master)](https://travis-ci.org/kandros/micro-jwt-auth)
 [![npm](https://img.shields.io/npm/v/micro-jwt-auth.svg)](https://www.npmjs.com/package/micro-jwt-auth)
 # micro-jwt-auth
-jwt authorization wrapper for [Micro](https://github.com/zeit/micro)
+jwt([json web token](https://jwt.io/introduction/)) authorization wrapper for [Micro](https://github.com/zeit/micro)
 
 > An `Authorization` header with value `Bearer MY_TOKEN_HERE` is expected
 
