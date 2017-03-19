@@ -5,7 +5,7 @@ const jwtAuth = require('../index')
 test('error throwed if secret undefined', () => {
   expect(
     () => jwtAuth()()
-  ).toThrow('micro-jwt-auth must me initialized passing a secret to decode incoming JWT token')
+  ).toThrow('micro-jwt-auth must be initialized passing a secret to decode incoming JWT token')
 });
 
 test('case of request has not authorization header', () => {
