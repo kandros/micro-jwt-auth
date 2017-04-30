@@ -19,7 +19,7 @@ module.exports = exports = (secret) => (fn) => {
         
         try {
             const token = bearerToken.replace('Bearer ', '')
-            jwt.verify(token, secret);
+            req.jwt = jwt.verify(token, secret);
         } catch(err) {
             res.writeHead(401)
             res.end('invalid token in Authorization header')
