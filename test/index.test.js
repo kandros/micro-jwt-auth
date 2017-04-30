@@ -44,7 +44,7 @@ test('that all works fine: no errors', () => {
   expect(result).toEqual('Good job!')
   expect(response.writeHead).toHaveBeenCalledTimes(0)
   expect(response.end).toHaveBeenCalledTimes(0)
-
+  expect(request.jwt).toEqual({ sub: '1234567890', name: 'Walter White', admin: true })
 })
 
 test('wrong bearer case', () => {

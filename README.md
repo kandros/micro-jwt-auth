@@ -18,11 +18,11 @@ const jwtAuth = require('micro-jwt-auth')
 */
 
 module.exports = jwtAuth('my_jwt_secret')(async(req, res) => {
-  return "Ciaone!"
+  return `Ciaone ${req.jwt.username}!`
 })
 ```
 
-#### with multiple wrappers 
+#### with multiple wrappers
 
 ```javascript
 'use strict'
@@ -32,7 +32,7 @@ const jwtAuth = require('micro-jwt-auth')
 const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)))
 
 const handle = async(req, res) => {
-  return "Ciaone!"
+  return `Ciaone ${req.jwt.username}!`
 }
 
 module.exports = compose(
