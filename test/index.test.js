@@ -1,6 +1,9 @@
 'use strict'
 
 const jwtAuth = require('../index')
+const VALID_HEADER = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IldhbHRlciBXaGl0ZSIsImFkbWluIjp0cnVlfQ.YyF_yOQsTSQghvM08WBp7VhsHRv-4Ir4eMQvsEycY1A'
+const INVALID_HEADER = 'Bearer wrong.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IldhbHRlciBXaGl0ZSIsImFkbWluIjp0cnVlfQ.YyF_yOQsTSQghvM08WBp7VhsHRv-4Ir4eMQvsEycY1A'
+const JWT_CONTENT = { sub: '1234567890', name: 'Walter White', admin: true }
 
 test('error throwed if secret undefined', () => {
   expect(
@@ -31,7 +34,7 @@ test('that all works fine: no errors', () => {
 
   const request = {
     headers: {
-      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IldhbHRlciBXaGl0ZSIsImFkbWluIjp0cnVlfQ.YyF_yOQsTSQghvM08WBp7VhsHRv-4Ir4eMQvsEycY1A'
+      authorization: VALID_HEADER
     },
     url: 'https://api.cabq.gov/domain/resources/1'
   }
@@ -46,14 +49,14 @@ test('that all works fine: no errors', () => {
   expect(result).toEqual('Good job!')
   expect(response.writeHead).toHaveBeenCalledTimes(0)
   expect(response.end).toHaveBeenCalledTimes(0)
-  expect(request.jwt).toEqual({ sub: '1234567890', name: 'Walter White', admin: true })
+  expect(request.jwt).toEqual(JWT_CONTENT)
 })
 
 test('wrong bearer case', () => {
 
   const request = {
     headers: {
-      authorization: 'Bearer wrong.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IldhbHRlciBXaGl0ZSIsImFkbWluIjp0cnVlfQ.YyF_yOQsTSQghvM08WBp7VhsHRv-4Ir4eMQvsEycY1A'
+      authorization: INVALID_HEADER
     },
     url: 'https://api.cabq.gov/domain/resources/1'
   }
@@ -89,4 +92,48 @@ test('no need authorization bearer if whitelisted path', () => {
   expect(response.writeHead).toHaveBeenCalledTimes(0)
   expect(response.end).toHaveBeenCalledTimes(0)
 
+})
+
+test('decode jwt even for whitelisted path', () => {
+
+  const request = {
+    headers: {
+      authorization: VALID_HEADER
+    },
+    url: 'https://api.cabq.gov/domain/resources/1'
+  }
+
+  const response = {
+    writeHead: jest.fn().mockImplementation(),
+    end: jest.fn().mockImplementation()
+  };
+
+  const result = jwtAuth('mySecret', [ '/domain/resources/1' ])(() => 'Good job!')(request, response)
+
+  expect(result).toEqual('Good job!')
+  expect(response.writeHead).toHaveBeenCalledTimes(0)
+  expect(response.end).toHaveBeenCalledTimes(0)
+  expect(request.jwt).toEqual(JWT_CONTENT)
+})
+
+test('do not throw error if jwt is invalid for whitelisted path', () => {
+
+  const request = {
+    headers: {
+      authorization: INVALID_HEADER
+    },
+    url: 'https://api.cabq.gov/domain/resources/1'
+  }
+
+  const response = {
+    writeHead: jest.fn().mockImplementation(),
+    end: jest.fn().mockImplementation()
+  };
+
+  const result = jwtAuth('mySecret', [ '/domain/resources/1' ])(() => 'Good job!')(request, response)
+
+  expect(result).toEqual('Good job!')
+  expect(response.writeHead).toHaveBeenCalledTimes(0)
+  expect(response.end).toHaveBeenCalledTimes(0)
+  expect(request.jwt).toBeUndefined()
 })
