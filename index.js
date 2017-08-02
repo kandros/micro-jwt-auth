@@ -1,11 +1,16 @@
 'use strict'
+
 const url = require('url')
 const jwt = require('jsonwebtoken')
 
-module.exports = exports = (secret, whitelist) => (fn) => {
+module.exports = exports = (secret, whitelist, config = {}) => (fn) => {
 
     if (!secret) {
         throw Error('micro-jwt-auth must be initialized passing a secret to decode incoming JWT token')
+    }
+
+    if (!Array.isArray(whitelist)) {
+        config = whitelist || {}
     }
 
     return (req, res) => {
@@ -15,7 +20,7 @@ module.exports = exports = (secret, whitelist) => (fn) => {
 
         if (!bearerToken && !whitelisted) {
             res.writeHead(401)
-            res.end('missing Authorization header')
+            res.end(config.resAuthMissing || 'missing Authorization header')
             return
         }
 
@@ -25,7 +30,7 @@ module.exports = exports = (secret, whitelist) => (fn) => {
         } catch(err) {
             if (!whitelisted) {
               res.writeHead(401)
-              res.end('invalid token in Authorization header')
+              res.end(config.resAuthInvalid || 'invalid token in Authorization header')
               return
             }
         }
