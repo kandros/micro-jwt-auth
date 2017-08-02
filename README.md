@@ -44,7 +44,8 @@ module.exports = compose(
 )(handle)
 ```
 
-#### with whitlist of paths
+#### with whitelist of paths
+Whitelisted paths make JWT token *optional*. However if valid token is provided it will be  decoded.
 
 ```javascript
 'use strict'
