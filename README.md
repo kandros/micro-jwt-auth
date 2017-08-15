@@ -60,3 +60,33 @@ module.exports = jwtAuth('my_jwt_secret', [ 'api/login' ])(async(req, res) => {
   return `Ciaone ${req.jwt.username}!`
 })
 ```
+
+#### with custom responses
+
+```javascript
+'use strict'
+
+const jwtAuth = require('micro-jwt-auth')
+
+/*
+    You can overwrite the default response with the optional config object
+*/
+
+module.exports = jwtAuth('my_jwt_secret', ['api/login'], {
+  resAuthInvalid: 'Error: Invalid authentication token',
+  resAuthMissing: 'Error: Missing authentication token'
+})(async(req, res) => {
+  return `Ciaone ${req.jwt.username}!`
+})
+
+/*
+  You may skip the whitelist if unnecessary
+*/
+
+module.exports = jwtAuth('my_jwt_secret', {
+  resAuthInvalid: 'Error: Invalid authentication token',
+  resAuthMissing: 'Error: Missing authentication token'
+})(async(req, res) => {
+  return `Ciaone ${req.jwt.username}!`
+})
+```

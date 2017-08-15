@@ -137,3 +137,43 @@ test('do not throw error if jwt is invalid for whitelisted path', () => {
   expect(response.end).toHaveBeenCalledTimes(0)
   expect(request.jwt).toBeUndefined()
 })
+
+test('custom response, wrong bearer', () => {
+
+  const request = {
+    headers: {
+      authorization: INVALID_HEADER
+    },
+    url: 'https://api.cabq.gov/domain/resources/1'
+  }
+
+  const response = {
+    writeHead: jest.fn().mockImplementation(),
+    end: jest.fn().mockImplementation()
+  }
+
+  const customRes = `${Math.random()}`
+  const result = jwtAuth('mySecret', [], { resAuthInvalid: customRes })(() => {})(request, response)
+
+  expect(response.end).toHaveBeenCalledWith(customRes)
+
+})
+
+test('custom response, missing bearer', () => {
+
+  const request = {
+    headers: {},
+    url: 'https://api.cabq.gov/domain/resources/1'
+  }
+
+  const response = {
+    writeHead: jest.fn().mockImplementation(),
+    end: jest.fn().mockImplementation()
+  }
+
+  const customRes = `${Math.random()}`
+  const result = jwtAuth('mySecret', { resAuthMissing: customRes })()(request, response)
+
+  expect(response.end).toHaveBeenCalledWith(customRes)
+
+})
