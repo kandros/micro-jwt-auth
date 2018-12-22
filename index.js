@@ -12,7 +12,7 @@ module.exports = exports = (secret, whitelist, config = {}) => fn => {
         config = whitelist || {}
     }
 
-    return (req, res) => {
+    return async (req, res) => {
         const bearerToken = req.headers.authorization
         const pathname = url.parse(req.url).pathname
         const whitelisted = Array.isArray(whitelist) && whitelist.indexOf(pathname) >= 0
@@ -25,7 +25,10 @@ module.exports = exports = (secret, whitelist, config = {}) => fn => {
 
         try {
             const token = bearerToken.replace('Bearer ', '')
-            req.jwt = jwt.verify(token, secret)
+            req.jwt = await new Promise((resolve, reject) => {
+                const callback = (err, decoded) => (err ? reject(err) : resolve(decoded))
+                jwt.verify(token, secret, config.verifyOptions, callback)
+            })
         } catch (err) {
             if (!whitelisted) {
                 res.writeHead(401)
