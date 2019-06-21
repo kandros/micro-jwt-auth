@@ -9,7 +9,9 @@ module.exports = exports = (secret, whitelist, config = {}) => fn => {
     }
 
     if (!Array.isArray(whitelist)) {
-        config = whitelist || {}
+        if (!config || Object.keys(config).length === 0) {
+            config = whitelist || {}
+        }
         whitelist = config.whitelist || []
     }
 
