@@ -7,15 +7,24 @@
     "jsonwebtoken": "8.3.0"
   },
   "devDependencies": {
-    "jest": "^18.1.0"
+    "jest": "^18.1.0",
+    "prettier": "1.18.2"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "reformat": "prettier --write index.js test/*.test.js"
   },
   "main": "index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kandros/micro-jwt-auth.git"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "printWidth": 120,
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
   }
 }
