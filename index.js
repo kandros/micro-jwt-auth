@@ -10,12 +10,13 @@ module.exports = exports = (secret, whitelist, config = {}) => fn => {
 
     if (!Array.isArray(whitelist)) {
         config = whitelist || {}
+        whitelist = config.whitelist || []
     }
 
     return async (req, res) => {
         const bearerToken = req.headers.authorization
         const pathname = url.parse(req.url).pathname
-        const whitelisted = Array.isArray(whitelist) && whitelist.indexOf(pathname) >= 0
+        const whitelisted = whitelist.indexOf(pathname) >= 0
 
         if (!bearerToken && !whitelisted) {
             res.writeHead(401)
