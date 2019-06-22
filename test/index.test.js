@@ -13,7 +13,7 @@ test('error throwed if secret undefined', () => {
     )
 })
 
-test('case of request has not authorization header', () => {
+test('case of request has not authorization header', async () => {
     const request = {
         headers: {},
         url: 'https://api.cabq.gov/domain/resources/1',
@@ -24,14 +24,14 @@ test('case of request has not authorization header', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret')()(request, response)
+    const result = await jwtAuth('mySecret')()(request, response)
 
     expect(result).toBeUndefined()
     expect(response.writeHead).toHaveBeenCalledWith(401)
     expect(response.end).toHaveBeenCalledWith('missing Authorization header')
 })
 
-test('that all works fine: no errors', () => {
+test('that all works fine: no errors', async () => {
     const request = {
         headers: {
             authorization: VALID_HEADER,
@@ -44,7 +44,7 @@ test('that all works fine: no errors', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret')(() => 'Good job!')(request, response)
+    const result = await jwtAuth('mySecret')(() => 'Good job!')(request, response)
 
     expect(result).toEqual('Good job!')
     expect(response.writeHead).toHaveBeenCalledTimes(0)
@@ -52,7 +52,7 @@ test('that all works fine: no errors', () => {
     expect(request.jwt).toEqual(JWT_CONTENT)
 })
 
-test('wrong bearer case', () => {
+test('wrong bearer case', async () => {
     const request = {
         headers: {
             authorization: INVALID_HEADER,
@@ -65,14 +65,14 @@ test('wrong bearer case', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret')(() => {})(request, response)
+    const result = await jwtAuth('mySecret')(() => {})(request, response)
 
     expect(result).toBeUndefined()
     expect(response.writeHead).toHaveBeenCalledWith(401)
     expect(response.end).toHaveBeenCalledWith('invalid token in Authorization header')
 })
 
-test('no need authorization bearer if whitelisted path', () => {
+test('no need authorization bearer if whitelisted path', async () => {
     const request = {
         headers: {},
         url: 'https://api.cabq.gov/domain/resources/1',
@@ -83,14 +83,14 @@ test('no need authorization bearer if whitelisted path', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
+    const result = await jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
 
     expect(result).toEqual('Good job!')
     expect(response.writeHead).toHaveBeenCalledTimes(0)
     expect(response.end).toHaveBeenCalledTimes(0)
 })
 
-test('decode jwt even for whitelisted path', () => {
+test('decode jwt even for whitelisted path', async () => {
     const request = {
         headers: {
             authorization: VALID_HEADER,
@@ -103,7 +103,7 @@ test('decode jwt even for whitelisted path', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
+    const result = await jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
 
     expect(result).toEqual('Good job!')
     expect(response.writeHead).toHaveBeenCalledTimes(0)
@@ -111,7 +111,7 @@ test('decode jwt even for whitelisted path', () => {
     expect(request.jwt).toEqual(JWT_CONTENT)
 })
 
-test('do not throw error if jwt is invalid for whitelisted path', () => {
+test('do not throw error if jwt is invalid for whitelisted path', async () => {
     const request = {
         headers: {
             authorization: INVALID_HEADER,
@@ -124,7 +124,7 @@ test('do not throw error if jwt is invalid for whitelisted path', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
+    const result = await jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
 
     expect(result).toEqual('Good job!')
     expect(response.writeHead).toHaveBeenCalledTimes(0)
@@ -132,7 +132,7 @@ test('do not throw error if jwt is invalid for whitelisted path', () => {
     expect(request.jwt).toBeUndefined()
 })
 
-test('custom response, wrong bearer', () => {
+test('custom response, wrong bearer', async () => {
     const request = {
         headers: {
             authorization: INVALID_HEADER,
@@ -146,12 +146,12 @@ test('custom response, wrong bearer', () => {
     }
 
     const customRes = `${Math.random()}`
-    const result = jwtAuth('mySecret', [], { resAuthInvalid: customRes })(() => {})(request, response)
+    const result = await jwtAuth('mySecret', [], { resAuthInvalid: customRes })(() => {})(request, response)
 
     expect(response.end).toHaveBeenCalledWith(customRes)
 })
 
-test('custom response, missing bearer', () => {
+test('custom response, missing bearer', async () => {
     const request = {
         headers: {},
         url: 'https://api.cabq.gov/domain/resources/1',
@@ -163,7 +163,7 @@ test('custom response, missing bearer', () => {
     }
 
     const customRes = `${Math.random()}`
-    const result = jwtAuth('mySecret', { resAuthMissing: customRes })()(request, response)
+    const result = await jwtAuth('mySecret', { resAuthMissing: customRes })()(request, response)
 
     expect(response.end).toHaveBeenCalledWith(customRes)
 })
