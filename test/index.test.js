@@ -75,7 +75,7 @@ test('wrong bearer case', () => {
 test('no need authorization bearer if whitelisted path', () => {
     const request = {
         headers: {},
-        url: 'https://api.cabq.gov/domain/resources/1',
+        url: 'https://api.cabq.gov/domain/resources/1/subresources',
     }
 
     const response = {
@@ -83,7 +83,7 @@ test('no need authorization bearer if whitelisted path', () => {
         end: jest.fn().mockImplementation(),
     }
 
-    const result = jwtAuth('mySecret', ['/domain/resources/1'])(() => 'Good job!')(request, response)
+    const result = jwtAuth('mySecret', ['/domain/resources/*/subresources'])(() => 'Good job!')(request, response)
 
     expect(result).toEqual('Good job!')
     expect(response.writeHead).toHaveBeenCalledTimes(0)

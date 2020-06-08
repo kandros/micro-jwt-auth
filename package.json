@@ -4,7 +4,8 @@
   "description": "jwt authencication wrapper for zeit/micro",
   "author": "jaga santagostino <jagasantagostino@gmail.com>",
   "dependencies": {
-    "jsonwebtoken": "8.3.0"
+    "jsonwebtoken": "8.3.0",
+    "url-pattern": "1.0.3"
   },
   "devDependencies": {
     "jest": "^18.1.0",
