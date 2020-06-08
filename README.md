@@ -56,7 +56,7 @@ const jwtAuth = require('micro-jwt-auth')
     Bypass authentication for login route
 */
 
-module.exports = jwtAuth('my_jwt_secret', [ 'api/login' ])(async(req, res) => {
+module.exports = jwtAuth('my_jwt_secret', [ 'api/login', 'public/*' ])(async(req, res) => {
   return `Ciaone ${req.jwt.username}!`
 })
 ```

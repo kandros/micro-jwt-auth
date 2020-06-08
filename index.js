@@ -2,6 +2,16 @@
 
 const url = require('url')
 const jwt = require('jsonwebtoken')
+const UrlPattern = require('url-pattern')
+
+function isWhitelisted(whitelist, pathname) {
+    if (!Array.isArray(whitelist)) return false
+    if (whitelist.indexOf(pathname) >= 0) return true
+    return whitelist.some(w => {
+        const pattern = new UrlPattern(w)
+        return pattern.match(pathname)
+    })
+}
 
 module.exports = exports = (secret, whitelist, config = {}) => fn => {
     if (!secret) {
@@ -15,7 +25,7 @@ module.exports = exports = (secret, whitelist, config = {}) => fn => {
     return (req, res) => {
         const bearerToken = req.headers.authorization
         const pathname = url.parse(req.url).pathname
-        const whitelisted = Array.isArray(whitelist) && whitelist.indexOf(pathname) >= 0
+        const whitelisted = isWhitelisted(whitelist, pathname)
 
         if (!bearerToken && !whitelisted) {
             res.writeHead(401)
